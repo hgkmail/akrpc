@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * JSON 工具类测试
  *
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.Test;
  * @since 2026/1/5
  */
 @Slf4j
-public class JsonUtilsTest {
+class JsonUtilsTest {
 
     @Test
     void test_toJson() {
@@ -22,7 +24,7 @@ public class JsonUtilsTest {
         rpcRequest.setRequestId("123456");
         log.info("test_toJson: {}", JsonUtils.toJson(rpcRequest));
 
-        Assertions.assertThat(JsonUtils.toJson(rpcRequest).length()).
+        assertThat(JsonUtils.toJson(rpcRequest).length()).
                 isGreaterThan("{\"requestId\":\"123456\"}".length());
     }
 
@@ -32,7 +34,7 @@ public class JsonUtilsTest {
         rpcRequest.setRequestId("123456");
         log.info("test_toJsonNonNull: {}", JsonUtils.toJsonNonNull(rpcRequest));
 
-        Assertions.assertThat(JsonUtils.toJsonNonNull(rpcRequest)).
+        assertThat(JsonUtils.toJsonNonNull(rpcRequest)).
                 isEqualTo("{\"requestId\":\"123456\"}");
     }
 }
