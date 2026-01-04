@@ -9,7 +9,7 @@
     </parent>
     <artifactId>akrpc-common</artifactId>
     <name>akrpc-common</name>
-    <description>akrpc-common</description>
+    <description>common 工具类</description>
 
     <properties>
         <java.version>21</java.version>

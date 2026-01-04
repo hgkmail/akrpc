@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: akrpc-consumer
+
+server:
+  port: 8082

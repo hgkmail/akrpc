@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: akrpc-provider
+
+server:
+  port: 8081

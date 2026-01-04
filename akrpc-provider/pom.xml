@@ -9,7 +9,7 @@
     </parent>
     <artifactId>akrpc-provider</artifactId>
     <name>akrpc-provider</name>
-    <description>akrpc-provider</description>
+    <description>AK-RPC 提供者</description>
 
     <properties>
         <java.version>21</java.version>
