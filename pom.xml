@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.9</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.shift</groupId>
+	<artifactId>akrpc</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>akrpc</name>
+	<description>AK-RPC framework</description>
+	<packaging>pom</packaging>
+
+	<url>https://github.com/hgkmail/akrpc</url>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://mit-license.org/</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>kimhuang</name>
+			<email>hgkformap@gmail.com</email>
+			<url>https://github.com/hgkmail</url>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/hgkmail/akrpc</url>
+	</scm>
+
+	<properties>
+		<java.version>21</java.version>
+		<akrpc.version>0.0.1-SNAPSHOT</akrpc.version>
+		<spring-boot.version>3.5.9</spring-boot.version>
+		<lombok.version>1.18.40</lombok.version>
+	</properties>
+
+	<modules>
+		<module>akrpc-common</module>
+		<module>akrpc-provider</module>
+		<module>akrpc-consumer</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring-boot.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.shift</groupId>
+				<artifactId>akrpc-common</artifactId>
+				<version>${akrpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.shift</groupId>
+				<artifactId>akrpc-provider</artifactId>
+				<version>${akrpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.shift</groupId>
+				<artifactId>akrpc-consumer</artifactId>
+				<version>${akrpc.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+						<path>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-configuration-processor</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
