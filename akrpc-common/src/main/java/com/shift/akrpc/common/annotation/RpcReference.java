@@ -24,5 +24,10 @@ public @interface RpcReference {
      */
     long timeout() default 5000;
 
+    /**
+     * 服务提供者URL
+     */
+    String url() default "";
+
     // todo 负载均衡、重试等配置
 }

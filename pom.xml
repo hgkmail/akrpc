@@ -39,6 +39,7 @@
 		<akrpc.version>0.0.1-SNAPSHOT</akrpc.version>
 		<spring-boot.version>3.5.9</spring-boot.version>
 		<lombok.version>1.18.40</lombok.version>
+		<apache.commons.version>3.18.0</apache.commons.version>
 	</properties>
 
 	<modules>
@@ -80,6 +81,13 @@
 				<groupId>com.shift</groupId>
 				<artifactId>akrpc-consumer</artifactId>
 				<version>${akrpc.version}</version>
+			</dependency>
+
+			<!--常用工具类 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${apache.commons.version}</version>
 			</dependency>
 
 		</dependencies>

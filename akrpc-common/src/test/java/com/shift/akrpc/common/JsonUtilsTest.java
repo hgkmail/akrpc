@@ -3,7 +3,6 @@ package com.shift.akrpc.common;
 import com.shift.akrpc.common.dto.RpcRequest;
 import com.shift.akrpc.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

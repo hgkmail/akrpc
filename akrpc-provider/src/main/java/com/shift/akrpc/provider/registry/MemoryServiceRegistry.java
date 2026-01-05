@@ -1,6 +1,9 @@
 package com.shift.akrpc.provider.registry;
 
 import com.shift.akrpc.common.constant.MagicValue;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Role;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  * @since 2026/1/5
  */
+@Component
+@Role(value = BeanDefinition.ROLE_INFRASTRUCTURE)
 public class MemoryServiceRegistry implements ServiceRegistry {
 
     private final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
