@@ -3,6 +3,8 @@ package com.shift.akrpc.consumer.proxy;
 import com.shift.akrpc.common.dto.RpcRequest;
 import com.shift.akrpc.common.dto.RpcResponse;
 import com.shift.akrpc.common.exception.RpcCallException;
+import com.shift.akrpc.common.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -16,6 +18,7 @@ import java.util.UUID;
  * @version 1.0
  * @since 2026/1/6
  */
+@Slf4j
 public class RpcProxyFactory implements InvocationHandler {
 
     private final String providerUrl;
@@ -47,9 +50,17 @@ public class RpcProxyFactory implements InvocationHandler {
         request.setParameters(args);
         request.setVersion(version);
 
+        log.info("调用服务: {}.{}, version: {}, request: {}",
+                request.getClassName(), request.getMethodName(), request.getVersion(), JsonUtils.toJson(request));
+        long beginTime = System.currentTimeMillis();
+
         // 发送 HTTP 请求
         String url = providerUrl + "/rpc/invoke";
         RpcResponse response = restTemplate.postForObject(url, request, RpcResponse.class);
+
+        log.info("服务调用完成: {}.{}, version: {}, response: {}, 耗时: {} ms",
+                request.getClassName(), request.getMethodName(), request.getVersion(),
+                JsonUtils.toJson(response), System.currentTimeMillis() - beginTime);
 
         if (response == null) {
             throw new RpcCallException("响应为空");

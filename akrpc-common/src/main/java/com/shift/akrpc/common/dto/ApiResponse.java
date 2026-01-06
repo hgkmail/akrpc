@@ -55,4 +55,9 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> fail(int code, String message, T data) {
         return new ApiResponse<>(code, message, data);
     }
+
+    public static <T> ApiResponse<T> fail(ErrorCode errorCode) {
+        assert errorCode!= null: "ErrorCode 不能为 null";
+        return new ApiResponse<>(errorCode.getCode(), errorCode.getDesc(), null);
+    }
 }

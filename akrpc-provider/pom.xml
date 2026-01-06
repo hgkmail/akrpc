@@ -20,7 +20,10 @@
             <groupId>com.shift</groupId>
             <artifactId>akrpc-common</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

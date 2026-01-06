@@ -4,6 +4,8 @@ import com.shift.akrpc.common.annotation.RpcService;
 import com.shift.akrpc.provider.registry.ServiceRegistry;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
@@ -27,7 +29,15 @@ public class RpcServiceScanner implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, @Nonnull String beanName) throws BeansException {
-        Class<?> clazz = bean.getClass();
+        Class<?> clazz;
+
+        // 判断是否代理类
+        if (AopUtils.isAopProxy(bean)) {
+            clazz = AopProxyUtils.ultimateTargetClass(bean);
+        } else {
+            clazz = bean.getClass();
+        }
+
         if (clazz.isAnnotationPresent(RpcService.class)) {
             RpcService rpcService = clazz.getAnnotation(RpcService.class);
             Class<?> interfaceClass = rpcService.value();
