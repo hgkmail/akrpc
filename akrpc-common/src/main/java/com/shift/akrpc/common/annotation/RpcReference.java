@@ -14,6 +14,19 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RpcReference {
+
+    /**
+     * 服务提供者 URL
+     * name 和 url 二选一
+     */
+    String url() default "";
+
+    /**
+     * 服务名称，用于服务发现
+     * name 和 url 二选一
+     */
+    String name() default "";
+
     /**
      * 服务版本
      */
@@ -23,11 +36,6 @@ public @interface RpcReference {
      * 超时时间(毫秒)
      */
     long timeout() default 5000;
-
-    /**
-     * 服务提供者URL
-     */
-    String url() default "";
 
     // todo 负载均衡、重试等配置
 }

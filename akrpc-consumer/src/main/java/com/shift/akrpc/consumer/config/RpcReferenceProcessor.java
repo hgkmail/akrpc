@@ -1,6 +1,7 @@
 package com.shift.akrpc.consumer.config;
 
 import com.shift.akrpc.common.annotation.RpcReference;
+import com.shift.akrpc.common.config.RpcConsumerProperties;
 import com.shift.akrpc.common.exception.RpcProxyException;
 import com.shift.akrpc.consumer.proxy.RpcProxyFactory;
 import jakarta.annotation.Nonnull;
@@ -25,11 +26,8 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
 
     private final RestTemplate restTemplate;
 
-    private final RpcConsumerProperties properties;
-
-    public RpcReferenceProcessor(RestTemplate restTemplate, RpcConsumerProperties properties) {
+    public RpcReferenceProcessor(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.properties = properties;
     }
 
     @Override
@@ -41,12 +39,8 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
             if (field.isAnnotationPresent(RpcReference.class)) {
                 RpcReference rpcReference = field.getAnnotation(RpcReference.class);
 
-                // 获取服务提供者URL，如果注解中没有指定，则从配置中获取
-                String providerUrl = StringUtils.isEmpty(rpcReference.url()) ?
-                        properties.getProviderUrl() : rpcReference.url();
-
                 RpcProxyFactory proxyFactory = new RpcProxyFactory(
-                        providerUrl,
+                        rpcReference.url(),
                         rpcReference.version(),
                         rpcReference.timeout(),
                         restTemplate

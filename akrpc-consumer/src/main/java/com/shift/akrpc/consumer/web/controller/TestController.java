@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    @RpcReference
+    @RpcReference(url = "http://localhost:8081")
     private CalcService calcService;
 
     @GetMapping("/add")

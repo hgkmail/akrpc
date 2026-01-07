@@ -12,7 +12,7 @@ AK-RPC 是一个高性能、可扩展的远程过程调用（RPC）框架，旨�
 
 ## 3 架构
 AK-RPC 框架主要由以下几个核心组件组成：
-- 注册中心（registry）：用于服务注册与发现，维护服务实例的信息。
+- 服务发现（discovery）：用于应用注册与发现，维护应用实例的信息。
 - 服务器端（provider）：接收客户端请求，执行相应的服务逻辑，并返回结果。
 - 客户端（consumer）：负责发起远程调用请求，处理响应结果。
 
@@ -20,8 +20,8 @@ AK-RPC 框架主要由以下几个核心组件组成：
 ```mermaid
 graph TD
     C(consumer) -->|RPC 调用| B(provider)
-    B -->|注册| A(registry)
-    C -->|查找| A
+    B -->|注册 ip+port| A(discovery)
+    C -->|查找 ip+port| A
 ```
 
 ## 4 快速开始

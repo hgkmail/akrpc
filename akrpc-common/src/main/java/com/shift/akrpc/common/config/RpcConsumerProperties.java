@@ -1,11 +1,10 @@
-package com.shift.akrpc.consumer.config;
+package com.shift.akrpc.common.config;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Role;
-import org.springframework.stereotype.Component;
 
 /**
  * Consumer 配置
@@ -16,15 +15,9 @@ import org.springframework.stereotype.Component;
  */
 @Getter
 @Setter
-@Component
 @Role(value = BeanDefinition.ROLE_INFRASTRUCTURE)
 @ConfigurationProperties(prefix = "akrpc.consumer")
 public class RpcConsumerProperties {
-
-    /**
-     * 服务提供者地址
-     */
-    private String providerUrl = "http://localhost:8080";
 
     /**
      * 读取超时时间，单位毫秒
@@ -35,5 +28,10 @@ public class RpcConsumerProperties {
      * 连接超时时间，单位毫秒
      */
     private int connectTimeout = 1000;
+
+    /**
+     * 重试次数
+     */
+    private int retries = 3;
 
 }

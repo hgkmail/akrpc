@@ -7,7 +7,12 @@ server:
 
 akrpc:
   consumer:
-    provider-url: http://localhost:8081
+    read-timeout: 3000
+    connect-timeout: 1000
+    retries: 3
+  discovery:
+    type: consul
+    address: localhost:8500
 
 management:
   endpoints:
