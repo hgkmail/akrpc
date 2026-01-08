@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    @RpcReference(url = "http://localhost:8081")
+    @RpcReference(name = "akrpc-provider")
     private CalcService calcService;
 
     @GetMapping("/add")

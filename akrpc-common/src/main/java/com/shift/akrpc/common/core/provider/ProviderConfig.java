@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.config;
+package com.shift.akrpc.common.core.provider;
 
 import com.shift.akrpc.common.core.discovery.ServiceDiscovery;
 import com.shift.akrpc.common.dto.RpcProvider;
@@ -7,6 +7,8 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import com.shift.akrpc.common.core.discovery.DiscoveryConfig;
 
 /**
  * 服务提供者配置类
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0
  * @since 2026/1/9
  */
+@Import(value = {DiscoveryConfig.class})
 @Configuration
 public class ProviderConfig implements InitializingBean, DisposableBean {
 

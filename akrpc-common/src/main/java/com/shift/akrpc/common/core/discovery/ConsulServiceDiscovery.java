@@ -273,7 +273,7 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
             } catch (Exception e) {
                 logger.error("Failed to refresh service cache", e);
             }
-        }, 30, 30, TimeUnit.SECONDS);
+        }, 10, 10, TimeUnit.SECONDS);
     }
 
     /**

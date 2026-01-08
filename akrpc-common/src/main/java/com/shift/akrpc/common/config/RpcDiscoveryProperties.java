@@ -22,4 +22,9 @@ public class RpcDiscoveryProperties {
     private String type;
     private String address;
 
+    /**
+     * 健康检查间隔，单位：秒
+     */
+    private int healthCheckInterval = 10;
+
 }

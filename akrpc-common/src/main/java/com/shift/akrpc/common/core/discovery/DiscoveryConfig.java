@@ -1,17 +1,18 @@
-package com.shift.akrpc.provider.config;
+package com.shift.akrpc.common.core.discovery;
 
 import com.google.common.base.Splitter;
 import com.shift.akrpc.common.config.InetUtilsProperties;
 import com.shift.akrpc.common.config.RpcDiscoveryProperties;
 import com.shift.akrpc.common.constant.MagicValue;
-import com.shift.akrpc.common.core.discovery.ConsulServiceDiscovery;
-import com.shift.akrpc.common.core.discovery.ServiceDiscovery;
 import com.shift.akrpc.common.utils.InetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 
 import java.util.List;
 
@@ -22,7 +23,9 @@ import java.util.List;
  * @version 1.0
  * @since 2026/1/8
  */
-@Configuration
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+@EnableConfigurationProperties(value = {RpcDiscoveryProperties.class})
+@Configuration(proxyBeanMethods = false)
 public class DiscoveryConfig {
 
     @Value("${server.port}")
@@ -34,18 +37,19 @@ public class DiscoveryConfig {
         this.rpcDiscoveryProperties = rpcDiscoveryProperties;
     }
 
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @ConditionalOnProperty(name = {"akrpc.discovery.type"}, havingValue = "consul")
     @Bean(destroyMethod = "shutdown")
-    public ServiceDiscovery serviceDiscovery() {
+    public ServiceDiscovery consulServiceDiscovery() {
         // 解析地址
         List<String> addressParts = Splitter.on(MagicValue.COLON).splitToList(rpcDiscoveryProperties.getAddress());
-        String host = StringUtils.isNotBlank(addressParts.get(0)) ? addressParts.get(0) : "localhost";
+        String host = StringUtils.isNotBlank(addressParts.getFirst()) ? addressParts.getFirst() : "localhost";
         int port = addressParts.size() > 1 ? Integer.parseInt(addressParts.get(1)) : 8500;
 
         return new ConsulServiceDiscovery(
                 host,
                 port,
-                30,
+                rpcDiscoveryProperties.getHealthCheckInterval(),
                 serverPort,
                 "/actuator/health",
                 "http"

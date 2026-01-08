@@ -1,12 +1,11 @@
 package com.shift.akrpc.consumer.config;
 
 import com.shift.akrpc.common.annotation.RpcReference;
-import com.shift.akrpc.common.config.RpcConsumerProperties;
+import com.shift.akrpc.common.core.discovery.ServiceDiscovery;
 import com.shift.akrpc.common.exception.RpcProxyException;
 import com.shift.akrpc.consumer.proxy.RpcProxyFactory;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,11 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
 
     private final RestTemplate restTemplate;
 
-    public RpcReferenceProcessor(RestTemplate restTemplate) {
+    private final ServiceDiscovery serviceDiscovery; 
+
+    public RpcReferenceProcessor(RestTemplate restTemplate, ServiceDiscovery serviceDiscovery) {
         this.restTemplate = restTemplate;
+        this.serviceDiscovery = serviceDiscovery;
     }
 
     @Override
@@ -41,9 +43,11 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
 
                 RpcProxyFactory proxyFactory = new RpcProxyFactory(
                         rpcReference.url(),
+                        rpcReference.name(),
                         rpcReference.version(),
                         rpcReference.timeout(),
-                        restTemplate
+                        restTemplate,
+                        serviceDiscovery
                 );
 
                 Object proxy = proxyFactory.createProxy(field.getType());

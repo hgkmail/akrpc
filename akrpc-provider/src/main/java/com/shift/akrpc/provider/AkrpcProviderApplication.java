@@ -1,12 +1,11 @@
 package com.shift.akrpc.provider;
 
-import com.shift.akrpc.common.config.RpcDiscoveryProperties;
+import com.shift.akrpc.common.annotation.EnableRpcProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+@EnableRpcProvider
 @SpringBootApplication
-@EnableConfigurationProperties(value = {RpcDiscoveryProperties.class})
 public class AkrpcProviderApplication {
 
     public static void main(String[] args) {
