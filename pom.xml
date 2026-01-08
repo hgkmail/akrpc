@@ -40,6 +40,8 @@
 		<spring-boot.version>3.5.9</spring-boot.version>
 		<lombok.version>1.18.40</lombok.version>
 		<apache.commons.version>3.18.0</apache.commons.version>
+		<guava.version>33.4.0-jre</guava.version>
+		<consul-api.version>1.4.5</consul-api.version>
 	</properties>
 
 	<modules>
@@ -99,6 +101,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-aop</artifactId>
 				<version>${spring-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.ecwid.consul</groupId>
+				<artifactId>consul-api</artifactId>
+				<version>${consul-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
 			</dependency>
 
 		</dependencies>
