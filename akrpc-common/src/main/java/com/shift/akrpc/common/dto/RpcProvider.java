@@ -1,5 +1,6 @@
 package com.shift.akrpc.common.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * @version 1.0
  * @since 2026/1/7
  */
+@Builder
 @Getter
 @Setter
 public class RpcProvider implements Serializable {

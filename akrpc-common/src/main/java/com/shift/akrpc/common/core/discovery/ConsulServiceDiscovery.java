@@ -209,13 +209,10 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
             for (HealthService healthService : healthServices) {
                 HealthService.Service service = healthService.getService();
 
-                RpcProvider provider = new RpcProvider();
-                provider.setName(service.getService());
-                provider.setAddress(service.getAddress());
-                provider.setPort(service.getPort());
-                provider.setCreateTime(now);
-                provider.setUpdateTime(now);
-
+                RpcProvider provider = RpcProvider.builder().
+                        name(service.getService()).address(service.getAddress()).port(service.getPort()).
+                        createTime(now).updateTime(now).
+                        build();
                 providers.add(provider);
             }
 
@@ -280,7 +277,7 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
      * 刷新所有服务缓存
      */
     private void refreshAllServiceCache() {
-        for (String serviceName : serviceCache.keySet()) {
+        for (var serviceName : serviceCache.keySet()) {
             try {
                 queryServiceFromConsul(serviceName);
             } catch (Exception e) {

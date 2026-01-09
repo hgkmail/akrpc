@@ -3,6 +3,7 @@ package com.shift.akrpc.consumer.web.controller;
 import com.shift.akrpc.common.annotation.RpcReference;
 import com.shift.akrpc.common.dto.ApiResponse;
 import com.shift.akrpc.common.example.CalcService;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
+    @Setter
     @RpcReference(name = "akrpc-provider")
-    private CalcService calcService;
+    public CalcService calcService;
 
     @GetMapping("/add")
     public ApiResponse<Integer> testAdd(@RequestParam Integer a, @RequestParam Integer b) {

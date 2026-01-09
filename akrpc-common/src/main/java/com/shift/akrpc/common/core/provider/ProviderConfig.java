@@ -42,12 +42,10 @@ public class ProviderConfig implements InitializingBean, DisposableBean {
     public void afterPropertiesSet() throws Exception {
         String ipAddress = inetUtils.findFirstNonLoopbackHostInfo().getIpAddress();
 
-        RpcProvider rpcProvider = new RpcProvider();
-        rpcProvider.setAddress(ipAddress);
-        rpcProvider.setPort(serverPort);
         long currentTime = System.currentTimeMillis() / 1000;
-        rpcProvider.setCreateTime(currentTime);
-        rpcProvider.setUpdateTime(currentTime);
+        RpcProvider rpcProvider = RpcProvider.builder().
+                address(ipAddress).port(serverPort).createTime(currentTime).updateTime(currentTime).
+                build();
         serviceDiscovery.register(applicationName, rpcProvider);
 
         registeredProvider = rpcProvider;
