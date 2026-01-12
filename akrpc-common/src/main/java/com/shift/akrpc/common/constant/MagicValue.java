@@ -31,4 +31,6 @@ public class MagicValue {
 
     public static final String BODY = "body";
 
+    public static final int SIXTEEN = 16;
+
 }

@@ -16,6 +16,8 @@ import com.shift.akrpc.common.utils.GZIPUtils;
 import com.shift.akrpc.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.InvocationHandler;
@@ -66,24 +68,61 @@ public class RpcProxyFactory implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // 构建 RPC 请求
-        RpcRequestBody requestBody = new RpcRequestBody();
-        requestBody.setClassName(method.getDeclaringClass().getName());
-        requestBody.setMethodName(method.getName());
-        requestBody.setParameterTypes(method.getParameterTypes());
-        requestBody.setParameters(args);
-        requestBody.setVersion(version);
-
         // 获取编码器
         RpcEncodeType encodeType = RpcEncodeType.fromName(rpcConsumerProperties.getEncode());
         RpcCodec rpcCodec = RpcCodecFactory.getCodec(encodeType.getCode());
 
-        RpcRequestHeader header = new RpcRequestHeader();
-        header.setRequestId(UUID.randomUUID().toString());
-        header.setEncode(encodeType.getCode());
+        String rpcUrl = this.buildUrl();
+        RpcRequestHeader reqHeader = this.buildHeader(encodeType);
+        RpcRequestBody reqBody = this.buildBody(method, args);
+        RpcRequestPacket packet = this.buildPacket(reqHeader, reqBody, rpcCodec);
+
+        RpcResponse response = this.makeRemoteCall(rpcUrl, packet, reqBody);
+
+        if (response == null) {
+            throw new RpcCallException("响应为空");
+        }
+        if (!response.isSuccess()) {
+            throw new RpcCallException(response.getError());
+        }
+        return response.getResult();
+    }
+
+    /**
+     * 执行远程调用
+     */
+    private @Nullable RpcResponse makeRemoteCall(String rpcUrl, RpcRequestPacket packet, RpcRequestBody reqBody) {
+        log.info("调用服务: {}.{}, version: {}, url: {}, reqBody: {}",
+                reqBody.getClassName(), reqBody.getMethodName(), reqBody.getVersion(), rpcUrl, JsonUtils.toJson(reqBody));
+        long beginTime = System.currentTimeMillis();
+
+        // 发送 HTTP 请求
+        RpcResponse response = restTemplate.postForObject(rpcUrl, packet, RpcResponse.class);
+
+        log.info("服务调用完成: {}.{}, version: {}, response: {}, 耗时: {} ms",
+                reqBody.getClassName(), reqBody.getMethodName(), reqBody.getVersion(),
+                JsonUtils.toJson(response), System.currentTimeMillis() - beginTime);
+        return response;
+    }
+
+    /**
+     * 构建 RPC 调用 URL
+     */
+    private @NonNull String buildUrl() {
+        return this.getRealAddress() + "/rpc/invoke";
+    }
+
+    /**
+     * 构建 RPC 请求包
+     */
+    private @NonNull RpcRequestPacket buildPacket(
+            RpcRequestHeader reqHeader,
+            RpcRequestBody reqBody,
+            RpcCodec rpcCodec
+    ) {
         RpcRequestPacket packet = new RpcRequestPacket();
-        packet.setHeader(header);
-        packet.setBody(rpcCodec.encode(requestBody));
+        packet.setHeader(reqHeader);
+        packet.setBody(rpcCodec.encode(reqBody));
         // 判断是否启用 GZIP 压缩
         packet.getHeader().setGzip( rpcConsumerProperties.isGzip() ? (byte) 1 : (byte) 0);
         if (rpcConsumerProperties.isGzip()) {
@@ -91,35 +130,37 @@ public class RpcProxyFactory implements InvocationHandler {
         }
         // 计算并设置 checksum
         packet.setChecksum(CRC32Utils.getValue(packet.getBody()));
-
-        String rpcUrl = this.getRealUrl() + "/rpc/invoke";
-
-        log.info("调用服务: {}.{}, version: {}, url: {}, requestBody: {}",
-                requestBody.getClassName(), requestBody.getMethodName(), requestBody.getVersion(), rpcUrl, JsonUtils.toJson(requestBody));
-        long beginTime = System.currentTimeMillis();
-
-        // 发送 HTTP 请求
-        RpcResponse response = restTemplate.postForObject(rpcUrl, packet, RpcResponse.class);
-
-        log.info("服务调用完成: {}.{}, version: {}, response: {}, 耗时: {} ms",
-                requestBody.getClassName(), requestBody.getMethodName(), requestBody.getVersion(),
-                JsonUtils.toJson(response), System.currentTimeMillis() - beginTime);
-
-        if (response == null) {
-            throw new RpcCallException("响应为空");
-        }
-
-        if (!response.isSuccess()) {
-            throw new RpcCallException(response.getError());
-        }
-
-        return response.getResult();
+        return packet;
     }
 
     /**
-     * 获取真实的服务提供者 URL
+     * 构建 RPC 请求体
      */
-    private String getRealUrl() {
+    private RpcRequestBody buildBody(Method method, Object[] args) {
+        // 构建 RPC 请求体
+        RpcRequestBody requestBody = new RpcRequestBody();
+        requestBody.setClassName(method.getDeclaringClass().getName());
+        requestBody.setMethodName(method.getName());
+        requestBody.setParameterTypes(method.getParameterTypes());
+        requestBody.setParameters(args);
+        requestBody.setVersion(version);
+        return requestBody;
+    }
+
+    /**
+     * 构建 RPC 请求头
+     */
+    private RpcRequestHeader buildHeader(RpcEncodeType encodeType) {
+        RpcRequestHeader header = new RpcRequestHeader();
+        header.setRequestId(UUID.randomUUID().toString());
+        header.setEncode(encodeType.getCode());
+        return header;
+    }
+
+    /**
+     * 获取真实的服务提供者地址
+     */
+    private String getRealAddress() {
         // 如果配置了直连 URL，则使用直连 URL
         if (StringUtils.isNotEmpty(this.providerUrl)) {
             return providerUrl;

@@ -1,5 +1,6 @@
 package com.shift.akrpc.common.core.provider.interceptor;
 
+import com.shift.akrpc.common.constant.MagicValue;
 import com.shift.akrpc.common.dto.RpcRequestPacket;
 import com.shift.akrpc.common.dto.RpcResponse;
 import org.springframework.util.CollectionUtils;
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public class ProviderInterceptorChain {
 
-    private List<ProviderInterceptor> interceptors = new ArrayList<>();
+    private final List<ProviderInterceptor> interceptors = new ArrayList<>(MagicValue.SIXTEEN);
 
     /**
      * 添加过滤器
