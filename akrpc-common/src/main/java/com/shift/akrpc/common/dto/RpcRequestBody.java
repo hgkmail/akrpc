@@ -11,20 +11,23 @@ import java.io.Serializable;
  *
  * @author Kim Huang
  * @version 1.0
- * @see RpcResponse
+ * @see RpcRequestPacket
  * @since 2026/1/4
  */
 @Getter
 @Setter
-public class RpcRequest implements Serializable {
+public class RpcRequestBody implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String requestId;
     private String className;
     private String methodName;
     private Class<?>[] parameterTypes;
     private Object[] parameters;
+
+    /**
+     * 服务版本号
+     */
     private String version;
 
 }

@@ -2,6 +2,7 @@ package com.shift.akrpc.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Kim Huang
  * @version 1.0
- * @see RpcRequest
+ * @see RpcRequestBody
  * @since 2026/1/5
  */
 @Getter
@@ -21,8 +22,31 @@ public class RpcResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String requestId;
+
     private Object result;
     private String error;
     private boolean success;
+
+    public RpcResponse(String requestId) {
+        this.requestId = requestId;
+    }
+
+    /**
+     * 创建成功的响应对象
+     */
+    public void success(Object result) {
+        this.setSuccess(true);
+        this.setResult(result);
+        this.setError(StringUtils.EMPTY);
+    }
+
+    /**
+     * 创建失败的响应对象
+     */
+    public void error(String error) {
+        this.setSuccess(false);
+        this.setError(error);
+        this.setResult(null);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.shift.akrpc.consumer.config;
 
 import com.shift.akrpc.common.annotation.RpcReference;
+import com.shift.akrpc.common.config.RpcConsumerProperties;
 import com.shift.akrpc.common.core.discovery.ServiceDiscovery;
 import com.shift.akrpc.common.exception.RpcProxyException;
 import com.shift.akrpc.consumer.proxy.RpcProxyFactory;
@@ -25,11 +26,18 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
 
     private final RestTemplate restTemplate;
 
-    private final ServiceDiscovery serviceDiscovery; 
+    private final ServiceDiscovery serviceDiscovery;
 
-    public RpcReferenceProcessor(RestTemplate restTemplate, ServiceDiscovery serviceDiscovery) {
+    private final RpcConsumerProperties rpcConsumerProperties;
+
+    public RpcReferenceProcessor(
+            RestTemplate restTemplate,
+            ServiceDiscovery serviceDiscovery,
+            RpcConsumerProperties rpcConsumerProperties
+    ) {
         this.restTemplate = restTemplate;
         this.serviceDiscovery = serviceDiscovery;
+        this.rpcConsumerProperties = rpcConsumerProperties;
     }
 
     @Override
@@ -42,12 +50,10 @@ public class RpcReferenceProcessor implements BeanPostProcessor {
                 RpcReference rpcReference = field.getAnnotation(RpcReference.class);
 
                 RpcProxyFactory proxyFactory = new RpcProxyFactory(
-                        rpcReference.url(),
-                        rpcReference.name(),
-                        rpcReference.version(),
-                        rpcReference.timeout(),
+                        rpcReference,
                         restTemplate,
-                        serviceDiscovery
+                        serviceDiscovery,
+                        rpcConsumerProperties
                 );
 
                 Object proxy = proxyFactory.createProxy(field.getType());

@@ -1,7 +1,7 @@
 package com.shift.akrpc.provider.config;
 
 import com.shift.akrpc.common.annotation.RpcService;
-import com.shift.akrpc.provider.registry.ServiceRegistry;
+import com.shift.akrpc.common.core.provider.ServiceRegistry;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopProxyUtils;

@@ -42,6 +42,7 @@
 		<apache.commons.version>3.18.0</apache.commons.version>
 		<guava.version>33.4.0-jre</guava.version>
 		<consul-api.version>1.4.5</consul-api.version>
+		<msgpack.version>0.9.10</msgpack.version>
 	</properties>
 
 	<modules>
@@ -112,6 +113,11 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.msgpack</groupId>
+				<artifactId>jackson-dataformat-msgpack</artifactId>
+				<version>${msgpack.version}</version>
 			</dependency>
 
 		</dependencies>

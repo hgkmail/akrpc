@@ -25,6 +25,6 @@ public class RpcDiscoveryProperties {
     /**
      * 健康检查间隔，单位：秒
      */
-    private int healthCheckInterval = 10;
+    private Integer healthCheckInterval = 10;
 
 }

@@ -22,16 +22,27 @@ public class RpcConsumerProperties {
     /**
      * 读取超时时间，单位毫秒
      */
-    private int readTimeout = 5000;
+    private Integer readTimeout = 5000;
 
     /**
      * 连接超时时间，单位毫秒
      */
-    private int connectTimeout = 1000;
+    private Integer connectTimeout = 1000;
 
     /**
      * 重试次数
      */
-    private int retries = 3;
+    private Integer retries = 3;
+
+    /**
+     * 编码类型，不区分大小写，默认 json
+     * @see com.shift.akrpc.common.enums.RpcEncodeType
+     */
+    private String encode = "json";
+
+    /**
+     * 是否启用 gzip 压缩
+     */
+    private boolean gzip = false;
 
 }

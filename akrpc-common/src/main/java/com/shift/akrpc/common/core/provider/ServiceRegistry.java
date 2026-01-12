@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.registry;
+package com.shift.akrpc.common.core.provider;
 
 /**
  * 服务注册中心接口

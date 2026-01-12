@@ -1,6 +1,6 @@
 package com.shift.akrpc.common;
 
-import com.shift.akrpc.common.dto.RpcRequest;
+import com.shift.akrpc.common.dto.RpcRequestBody;
 import com.shift.akrpc.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -19,21 +19,21 @@ class JsonUtilsTest {
 
     @Test
     void test_toJson() {
-        RpcRequest rpcRequest = new RpcRequest();
-        rpcRequest.setRequestId("123456");
-        log.info("test_toJson: {}", JsonUtils.toJson(rpcRequest));
+        RpcRequestBody rpcRequestBody = new RpcRequestBody();
+        rpcRequestBody.setVersion("123456");
+        log.info("test_toJson: {}", JsonUtils.toJson(rpcRequestBody));
 
-        assertThat(JsonUtils.toJson(rpcRequest).length()).
+        assertThat(JsonUtils.toJson(rpcRequestBody).length()).
                 isGreaterThan("{\"requestId\":\"123456\"}".length());
     }
 
     @Test
-    void test_toJsonNonNull() {
-        RpcRequest rpcRequest = new RpcRequest();
-        rpcRequest.setRequestId("123456");
-        log.info("test_toJsonNonNull: {}", JsonUtils.toJsonNonNull(rpcRequest));
+    void test_toJsonWithoutNull() {
+        RpcRequestBody rpcRequestBody = new RpcRequestBody();
+        rpcRequestBody.setVersion("123456");
+        log.info("test_toJsonNonNull: {}", JsonUtils.toJsonWithoutNull(rpcRequestBody));
 
-        assertThat(JsonUtils.toJsonNonNull(rpcRequest)).
+        assertThat(JsonUtils.toJsonWithoutNull(rpcRequestBody)).
                 isEqualTo("{\"requestId\":\"123456\"}");
     }
 }

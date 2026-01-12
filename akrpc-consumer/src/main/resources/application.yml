@@ -10,6 +10,8 @@ akrpc:
     read-timeout: 3000
     connect-timeout: 1000
     retries: 3
+    encode: msgpack
+    gzip: true
   discovery:
     type: consul
     address: localhost:8500
