@@ -123,11 +123,13 @@ public class RpcProxyFactory implements InvocationHandler {
         RpcRequestPacket packet = new RpcRequestPacket();
         packet.setHeader(reqHeader);
         packet.setBody(rpcCodec.encode(reqBody));
+
         // 判断是否启用 GZIP 压缩
         packet.getHeader().setGzip( rpcConsumerProperties.isGzip() ? (byte) 1 : (byte) 0);
         if (rpcConsumerProperties.isGzip()) {
             packet.setBody(GZIPUtils.compress(packet.getBody()));
         }
+
         // 计算并设置 checksum
         packet.setChecksum(CRC32Utils.getValue(packet.getBody()));
         return packet;

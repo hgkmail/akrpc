@@ -22,7 +22,8 @@ public class RpcCodecFactory {
         codecMap.put(RpcEncodeType.JSON.getCode(), new JsonRpcCodec());
         codecMap.put(RpcEncodeType.JDK.getCode(), new JdkRpcCodec());
         codecMap.put(RpcEncodeType.MSGPACK.getCode(), new MsgpackRpcCodec());
-        // 可以在这里添加更多的编码器实现
+        codecMap.put(RpcEncodeType.KRYO.getCode(), new KryoRpcCodec());
+        codecMap.put(RpcEncodeType.HESSIAN.getCode(), new HessianRpcCodec());
     }
 
     /**
