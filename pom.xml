@@ -39,12 +39,13 @@
 		<akrpc.version>0.0.1-SNAPSHOT</akrpc.version>
 		<spring-boot.version>3.5.9</spring-boot.version>
 		<lombok.version>1.18.40</lombok.version>
-		<apache.commons.version>3.18.0</apache.commons.version>
+		<apache.commons-lang3.version>3.18.0</apache.commons-lang3.version>
+		<apache.commons-collections4.version>4.5.0</apache.commons-collections4.version>
 		<guava.version>33.4.0-jre</guava.version>
 		<consul-api.version>1.4.5</consul-api.version>
 		<msgpack.version>0.9.10</msgpack.version>
 		<kryo.version>5.6.2</kryo.version>
-		<hessian.version>3.1.3</hessian.version>
+		<hessian.version>4.0.66</hessian.version>
 	</properties>
 
 	<modules>
@@ -92,7 +93,12 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>${apache.commons.version}</version>
+				<version>${apache.commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>${apache.commons-collections4.version}</version>
 			</dependency>
 
 			<dependency>
@@ -158,7 +164,17 @@
 
 	<repositories>
 		<repository>
-			<id>public</id>
+			<id>central</id>
+			<name>central</name>
+			<url>https://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+
+		<!-- 阿里云maven仓库 -->
+		<repository>
+			<id>aliyun</id>
 			<name>aliyun nexus</name>
 			<url>https://maven.aliyun.com/repository/public</url>
 			<releases>
@@ -166,6 +182,7 @@
 			</releases>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>public</id>

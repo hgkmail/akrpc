@@ -22,14 +22,12 @@ public class HeaderProviderInterceptor implements ProviderInterceptor {
         RpcRequestHeader header = reqPacket.getHeader();
 
         if (header.getMagic().length != MagicValue.MAGIC_WORD.length) {
-            rpcRes.setSuccess(false);
-            rpcRes.setError("无效的请求头: 魔法字长度错误");
+            rpcRes.error("无效的请求头: 魔法字长度错误");
             return false;
         }
         for (int i = 0; i < MagicValue.MAGIC_WORD.length; i++) {
             if (header.getMagic()[i] != MagicValue.MAGIC_WORD[i]) {
-                rpcRes.setSuccess(false);
-                rpcRes.setError("无效的请求头: 魔法字错误");
+                rpcRes.error("无效的请求头: 魔法字错误");
                 return false;
             }
         }

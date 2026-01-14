@@ -48,8 +48,7 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
 
             Object result = method.invoke(service, requestBody.getParameters());
 
-            rpcRes.setSuccess(true);
-            rpcRes.setResult(result);
+            rpcRes.success(result);
             return true;
         } catch (Exception e) {
             rpcRes.setSuccess(false);

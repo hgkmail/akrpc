@@ -24,7 +24,7 @@ class JsonUtilsTest {
         log.info("test_toJson: {}", JsonUtils.toJson(rpcRequestBody));
 
         assertThat(JsonUtils.toJson(rpcRequestBody).length()).
-                isGreaterThan("{\"requestId\":\"123456\"}".length());
+                isGreaterThan("{\"version\":\"123456\"}".length());
     }
 
     @Test
@@ -34,6 +34,6 @@ class JsonUtilsTest {
         log.info("test_toJsonNonNull: {}", JsonUtils.toJsonWithoutNull(rpcRequestBody));
 
         assertThat(JsonUtils.toJsonWithoutNull(rpcRequestBody)).
-                isEqualTo("{\"requestId\":\"123456\"}");
+                isEqualTo("{\"version\":\"123456\"}");
     }
 }

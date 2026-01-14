@@ -3,7 +3,7 @@ package com.shift.akrpc.common.core.provider.interceptor;
 import com.shift.akrpc.common.constant.MagicValue;
 import com.shift.akrpc.common.dto.RpcRequestPacket;
 import com.shift.akrpc.common.dto.RpcResponse;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

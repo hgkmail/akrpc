@@ -27,14 +27,14 @@ public class TestController {
     public CalcService calcService;
 
     @GetMapping("/add")
-    public ApiResponse<Integer> testAdd(@RequestParam Integer a, @RequestParam Integer b) {
-        int result = calcService.add(a, b);
+    public ApiResponse<Long> testAdd(@RequestParam Long a, @RequestParam Long b) {
+        Long result = calcService.add(a, b);
         return ApiResponse.success(result);
     }
 
     @GetMapping("/sub")
-    public ApiResponse<Integer> testSubtract(@RequestParam Integer a, @RequestParam Integer b) {
-        int result = calcService.subtract(a, b);
+    public ApiResponse<Double> testSubtract(@RequestParam Double a, @RequestParam Double b) {
+        Double result = calcService.subtract(a, b);
         return ApiResponse.success(result);
     }
 

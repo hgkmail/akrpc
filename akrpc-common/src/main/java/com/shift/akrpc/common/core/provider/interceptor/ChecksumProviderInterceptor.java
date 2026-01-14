@@ -25,8 +25,7 @@ public class ChecksumProviderInterceptor implements ProviderInterceptor {
         if (checksum != reqPacket.getChecksum()) {
             log.warn("收到损坏的RPC请求包: {}", JsonUtils.toJson(reqPacket));
 
-            rpcRes.setSuccess(false);
-            rpcRes.setError("请求包校验失败");
+            rpcRes.error("请求包校验失败");
             return false;
         }
 

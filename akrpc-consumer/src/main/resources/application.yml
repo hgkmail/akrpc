@@ -10,8 +10,8 @@ akrpc:
     read-timeout: 3000
     connect-timeout: 1000
     retries: 3
-    encode: hessian
-    gzip: true
+    encode: json
+    gzip: false
   discovery:
     type: consul
     address: localhost:8500

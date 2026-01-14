@@ -35,7 +35,7 @@ class AkrpcConsumerApplicationTests {
     @Test
     void test_test_controller() throws Exception {
         // Set up mock behavior
-        Mockito.when(calcService.add(5, 3)).thenReturn(8);
+        Mockito.when(calcService.add(5L, 3L)).thenReturn(8L);
         testController.setCalcService(calcService);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/test/add").param("a", "5").param("b", "3"))
