@@ -47,27 +47,8 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
                     requestBody.getParameterTypes()
             );
 
-            // 参数类型转换
-            if (requestBody.getParameters() != null) {
-                Class<?>[] parameterTypes = method.getParameterTypes();
-                int paramLen = requestBody.getParameters().length;
-                Object[] convertedParams = new Object[paramLen];
-
-                for (int i = 0; i < paramLen; i++) {
-                    Object originParam = requestBody.getParameters()[i];
-                    Class<?> targetType = parameterTypes[i];
-
-                    // 判断类型是否匹配
-                    // isAssignableFrom: 判断 targetType 是否是 originParam 的父类或接口
-                    if (originParam == null || targetType.isAssignableFrom(originParam.getClass())) {
-                        convertedParams[i] = originParam;
-                    } else {
-                        // 否则进行类型转换
-                        convertedParams[i] = ConvertUtils.convert(originParam, targetType);
-                    }
-                }
-                requestBody.setParameters(convertedParams);
-            }
+            // 处理参数类型转换
+            this.handleParameterType(requestBody, method);
 
             Object result = method.invoke(service, requestBody.getParameters());
 
@@ -81,4 +62,35 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
         }
 
     }
+
+    /**
+     * 处理参数类型转换
+     */
+    private void handleParameterType(RpcRequestBody requestBody, Method method) {
+        if (requestBody.getParameters() == null || requestBody.getParameters().length == 0) {
+            return;
+        }
+
+        int paramLen = requestBody.getParameters().length;
+        Object[] convertedParams = new Object[paramLen];
+
+        Class<?>[] parameterTypes = method.getParameterTypes();
+
+        for (int i = 0; i < paramLen; i++) {
+            Object originParam = requestBody.getParameters()[i];
+            Class<?> targetType = parameterTypes[i];
+
+            // 判断类型是否匹配
+            // isAssignableFrom: 判断 targetType 是否是 originParam 的父类或接口
+            if (originParam == null || targetType.isAssignableFrom(originParam.getClass())) {
+                convertedParams[i] = originParam;
+            } else {
+                // 否则进行类型转换
+                convertedParams[i] = ConvertUtils.convert(originParam, targetType);
+            }
+        }
+
+        requestBody.setParameters(convertedParams);
+    }
+
 }

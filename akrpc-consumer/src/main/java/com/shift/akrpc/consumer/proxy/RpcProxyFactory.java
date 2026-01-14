@@ -88,15 +88,22 @@ public class RpcProxyFactory implements InvocationHandler {
         }
 
         // 返回值类型转换
-        if (response.getResult()!=null) {
-            Class<?> returnType = reqBody.getReturnType();
-            // 判断类型是否一致，不一致则进行转换
-            if (!returnType.isAssignableFrom(response.getResult().getClass())) {
-                response.setResult(ConvertUtils.convert(response.getResult(), returnType));
-            }
-        }
+        this.handleReturnType(response, method);
 
         return response.getResult();
+    }
+
+    private void handleReturnType(RpcResponse response, Method method) {
+        if (response.getResult() == null) {
+            return;
+        }
+
+        Class<?> returnType = method.getReturnType();
+
+        // 判断类型是否一致，不一致则进行转换
+        if (!returnType.isAssignableFrom(response.getResult().getClass())) {
+            response.setResult(ConvertUtils.convert(response.getResult(), returnType));
+        }
     }
 
     /**
