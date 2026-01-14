@@ -12,6 +12,7 @@ import com.shift.akrpc.common.dto.RpcResponse;
 import com.shift.akrpc.common.enums.RpcEncodeType;
 import com.shift.akrpc.common.exception.RpcCallException;
 import com.shift.akrpc.common.utils.CRC32Utils;
+import com.shift.akrpc.common.utils.ConvertUtils;
 import com.shift.akrpc.common.utils.GZIPUtils;
 import com.shift.akrpc.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,16 @@ public class RpcProxyFactory implements InvocationHandler {
         if (!response.isSuccess()) {
             throw new RpcCallException(response.getError());
         }
+
+        // 返回值类型转换
+        if (response.getResult()!=null) {
+            Class<?> returnType = reqBody.getReturnType();
+            // 判断类型是否一致，不一致则进行转换
+            if (!returnType.isAssignableFrom(response.getResult().getClass())) {
+                response.setResult(ConvertUtils.convert(response.getResult(), returnType));
+            }
+        }
+
         return response.getResult();
     }
 
@@ -125,7 +136,7 @@ public class RpcProxyFactory implements InvocationHandler {
         packet.setBody(rpcCodec.encode(reqBody));
 
         // 判断是否启用 GZIP 压缩
-        packet.getHeader().setGzip( rpcConsumerProperties.isGzip() ? (byte) 1 : (byte) 0);
+        packet.getHeader().setGzip(ConvertUtils.bool2Byte(rpcConsumerProperties.isGzip()));
         if (rpcConsumerProperties.isGzip()) {
             packet.setBody(GZIPUtils.compress(packet.getBody()));
         }
@@ -145,6 +156,7 @@ public class RpcProxyFactory implements InvocationHandler {
         requestBody.setMethodName(method.getName());
         requestBody.setParameterTypes(method.getParameterTypes());
         requestBody.setParameters(args);
+        requestBody.setReturnType(method.getReturnType());
         requestBody.setVersion(version);
         return requestBody;
     }

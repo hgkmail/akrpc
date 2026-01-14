@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@SuppressWarnings("rawtypes")
 public class ExampleReq implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class ExampleReq implements Serializable {
         private Long value;
     }
 
-    private List<ReqItem> reqItemList;
+    private List reqItemList;
 
     /**
      * 操作类型 0: sum, 1: multiply

@@ -24,6 +24,7 @@ public class RpcRequestBody implements Serializable {
     private String methodName;
     private Class<?>[] parameterTypes;
     private Object[] parameters;
+    private Class<?> returnType;
 
     /**
      * 服务版本号

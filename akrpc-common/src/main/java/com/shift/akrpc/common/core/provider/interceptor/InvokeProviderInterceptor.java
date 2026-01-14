@@ -4,6 +4,7 @@ import com.shift.akrpc.common.core.provider.ServiceRegistry;
 import com.shift.akrpc.common.dto.RpcRequestBody;
 import com.shift.akrpc.common.dto.RpcRequestPacket;
 import com.shift.akrpc.common.dto.RpcResponse;
+import com.shift.akrpc.common.utils.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
@@ -27,9 +28,9 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
 
     @Override
     public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
-        RpcRequestBody requestBody = (RpcRequestBody) context.get("body");
-
         try {
+            RpcRequestBody requestBody = (RpcRequestBody) context.get("body");
+
             Object service = serviceRegistry.getService(
                     requestBody.getClassName(),
                     requestBody.getVersion()
@@ -45,6 +46,28 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
                     requestBody.getMethodName(),
                     requestBody.getParameterTypes()
             );
+
+            // 参数类型转换
+            if (requestBody.getParameters() != null) {
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                int paramLen = requestBody.getParameters().length;
+                Object[] convertedParams = new Object[paramLen];
+
+                for (int i = 0; i < paramLen; i++) {
+                    Object originParam = requestBody.getParameters()[i];
+                    Class<?> targetType = parameterTypes[i];
+
+                    // 判断类型是否匹配
+                    // isAssignableFrom: 判断 targetType 是否是 originParam 的父类或接口
+                    if (originParam == null || targetType.isAssignableFrom(originParam.getClass())) {
+                        convertedParams[i] = originParam;
+                    } else {
+                        // 否则进行类型转换
+                        convertedParams[i] = ConvertUtils.convert(originParam, targetType);
+                    }
+                }
+                requestBody.setParameters(convertedParams);
+            }
 
             Object result = method.invoke(service, requestBody.getParameters());
 

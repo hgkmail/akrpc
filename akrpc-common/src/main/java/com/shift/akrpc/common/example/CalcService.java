@@ -12,12 +12,13 @@ import java.util.Map;
  * @version 1.0
  * @since 2026/1/6
  */
+@SuppressWarnings("rawtypes")
 public interface CalcService {
 
     /**
      * 整数加法
      */
-    long add(long a, long b);
+    Long add(Long a, Long b);
 
     /**
      * 浮点数减法
@@ -47,17 +48,17 @@ public interface CalcService {
     /**
      * 数组求和
      */
-    int sumArray(Integer[] numbers);
+    Long sumArray(Long[] numbers);
 
     /**
      * 列表求积
      */
-    long productList(List<Long> numbers);
+    Long productList(List numbers);
 
     /**
      * map 翻转
      */
-    Map<String, String> flipMap(Map<String, String> map);
+    Map flipMap(Map map);
 
     /**
      * 复杂对象处理

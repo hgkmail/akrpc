@@ -15,4 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends BaseExceptionHandler {
 
+//    @InitBinder
+//    public void initBinder(WebDataBinder binder, WebRequest request) {
+//        // 转换日期
+//        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        // CustomDateEditor 为自定义日期编辑器
+//        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+//    }
+
 }
