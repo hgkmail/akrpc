@@ -1,18 +1,16 @@
 package com.shift.akrpc.provider.example;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.shift.akrpc.common.annotation.RpcService;
 import com.shift.akrpc.common.example.CalcService;
 import com.shift.akrpc.common.example.ExampleReq;
 import com.shift.akrpc.common.example.ExampleReq.ReqItem;
 import com.shift.akrpc.common.example.ExampleResp;
-import com.shift.akrpc.common.utils.ConvertUtils;
+import com.shift.akrpc.common.example.ProductListReq;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -69,29 +67,25 @@ public class CalcServiceImpl implements CalcService {
     }
 
     @Override
-    public Long productList(List numbers) {
-        List<Long> nums = ConvertUtils.convert(numbers, new TypeReference<>() {});
-        return nums.stream().reduce(1L,
-                (x, y) -> x * y);
+    public Long productList(ProductListReq req) {
+        return req.getNumbers().stream().reduce(1L, (x, y) -> x * y);
     }
 
     @Override
-    public Map flipMap(Map map) {
-        Map<String, String> realMap = ConvertUtils.convert(map, new TypeReference<>() {});
-        return realMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+    public Map<String, String> flipMap(Map<String, String> map) {
+        return map.entrySet().stream().collect(
+                Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
 
     @Override
     public ExampleResp opByName(ExampleReq req) {
         ExampleResp resp = new ExampleResp();
 
-        List<ReqItem> reqItems = ConvertUtils.convert(req.getReqItemList(), new TypeReference<>() {});
-
         // 按 name 相加
         if (req.getOp() == 0) {
-            Map<String, Long> sums = reqItems.stream().collect(
+            Map<String, Long> sums = req.getReqItemList().stream().collect(
                     Collectors.groupingBy(ReqItem::getName, Collectors.summingLong(ReqItem::getValue)));
+
             resp.setRespItemList(sums.entrySet().stream().map(e -> {
                 ExampleResp.RespItem item = new ExampleResp.RespItem();
                 item.setName(e.getKey());
@@ -103,8 +97,9 @@ public class CalcServiceImpl implements CalcService {
 
         // 按 name 相乘
         if (req.getOp() == 1) {
-            Map<String, Long> products = reqItems.stream().collect(
+            Map<String, Long> products = req.getReqItemList().stream().collect(
                     Collectors.groupingBy(ReqItem::getName, Collectors.reducing(1L, ReqItem::getValue, (x, y) -> x * y)));
+
             resp.setRespItemList(products.entrySet().stream().map(e -> {
                 ExampleResp.RespItem item = new ExampleResp.RespItem();
                 item.setName(e.getKey());

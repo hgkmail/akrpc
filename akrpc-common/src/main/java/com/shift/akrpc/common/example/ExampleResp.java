@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@SuppressWarnings("rawtypes")
 public class ExampleResp implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,7 +30,7 @@ public class ExampleResp implements Serializable {
         private Long value;
     }
 
-    private List respItemList;
+    private List<RespItem> respItemList;
 
     private Long total;
 }

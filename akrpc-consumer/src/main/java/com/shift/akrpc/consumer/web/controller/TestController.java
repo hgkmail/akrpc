@@ -5,6 +5,7 @@ import com.shift.akrpc.common.dto.ApiResponse;
 import com.shift.akrpc.common.example.CalcService;
 import com.shift.akrpc.common.example.ExampleReq;
 import com.shift.akrpc.common.example.ExampleResp;
+import com.shift.akrpc.common.example.ProductListReq;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,11 +74,11 @@ public class TestController {
 
     @GetMapping("/productList")
     public ApiResponse<Long> testProductList(@RequestParam List<Long> numbers) {
-        return ApiResponse.success(calcService.productList(numbers));
+        return ApiResponse.success(calcService.productList(new ProductListReq(numbers)));
     }
 
     @PostMapping("/flipMap")
-    public ApiResponse<Map> testFlipMap(@RequestBody Map<String, String> map) {
+    public ApiResponse<Map<String, String>> testFlipMap(@RequestBody Map<String, String> map) {
         return ApiResponse.success(calcService.flipMap(map));
     }
 

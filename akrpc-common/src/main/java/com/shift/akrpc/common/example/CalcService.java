@@ -2,7 +2,6 @@ package com.shift.akrpc.common.example;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +11,6 @@ import java.util.Map;
  * @version 1.0
  * @since 2026/1/6
  */
-@SuppressWarnings("rawtypes")
 public interface CalcService {
 
     /**
@@ -53,12 +51,12 @@ public interface CalcService {
     /**
      * 列表求积
      */
-    Long productList(List numbers);
+    Long productList(ProductListReq req);
 
     /**
      * map 翻转
      */
-    Map flipMap(Map map);
+    Map<String, String> flipMap(Map<String, String> map);
 
     /**
      * 复杂对象处理

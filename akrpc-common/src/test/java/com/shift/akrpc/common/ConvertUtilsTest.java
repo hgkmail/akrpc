@@ -1,8 +1,13 @@
 package com.shift.akrpc.common;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.shift.akrpc.common.utils.ConvertUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ConvertUtils 测试类
@@ -21,6 +26,14 @@ class ConvertUtilsTest {
 
         intValue = ConvertUtils.convert(null, Long.class);
         Assertions.assertNull(intValue);
+
+        List<Long> longList = Arrays.asList(1L, 2L, 3L);
+        // Using TypeReference for conversion
+        List<Integer> list1 = ConvertUtils.convert(longList, new TypeReference<>() {});
+        // Using JavaType for conversion
+        List<Integer> list2 = ConvertUtils.convert(longList,
+                ConvertUtils.getObjMapper().getTypeFactory().constructParametricType(List.class, Integer.class));
+        Assertions.assertTrue(CollectionUtils.isEqualCollection(list1, list2));
     }
 
     @Test
