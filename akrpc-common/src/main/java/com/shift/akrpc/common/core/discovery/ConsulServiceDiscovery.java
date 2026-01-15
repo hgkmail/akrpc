@@ -5,12 +5,14 @@ import com.ecwid.consul.v1.agent.model.NewService;
 import com.ecwid.consul.v1.health.HealthServicesRequest;
 import com.ecwid.consul.v1.health.model.HealthService;
 import com.shift.akrpc.common.dto.RpcProvider;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,6 +33,7 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
     private final ScheduledExecutorService scheduler;
     private final Map<String, List<RpcProvider>> serviceCache;
     private final Map<String, String> serviceIdMap;
+    private final Random random = new Random();
 
     // 配置参数
     private final long healthCheckInterval;
@@ -175,7 +178,7 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
     }
 
     @Override
-    public List<RpcProvider> getService(String serviceName) {
+    public List<RpcProvider> getAllInstance(String serviceName) {
         if (serviceName == null) {
             throw new IllegalArgumentException("Service name cannot be null");
         }
@@ -188,6 +191,24 @@ public class ConsulServiceDiscovery implements ServiceDiscovery {
 
         // 缓存中没有，从Consul查询
         return queryServiceFromConsul(serviceName);
+    }
+
+    @Override
+    public RpcProvider getServiceInstance(String serviceName) {
+        List<RpcProvider> providers = getAllInstance(serviceName);
+        if (CollectionUtils.isEmpty(providers)) {
+            logger.warn("No available instances for service: {}", serviceName);
+            return null;
+        }
+
+        // 简单的随机负载均衡策略
+        int index = random.nextInt(providers.size());
+        RpcProvider selectedProvider = providers.get(index);
+
+        logger.debug("Selected instance for service {}: {}:{}", serviceName,
+                selectedProvider.getAddress(), selectedProvider.getPort());
+
+        return selectedProvider;
     }
 
     /**

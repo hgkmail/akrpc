@@ -32,11 +32,19 @@ public interface ServiceDiscovery {
     void deregister(String serviceName, RpcProvider provider);
 
     /**
-     * 获取服务
+     * 获取所有服务实例
      *
      * @param serviceName 服务名称
      * @return 服务提供者列表
      */
-    List<RpcProvider> getService(String serviceName);
+    List<RpcProvider> getAllInstance(String serviceName);
+
+    /**
+     * 获取服务实例，内置负载均衡策略
+     *
+     * @param serviceName 服务名称
+     * @return 服务提供者实例
+     */
+    RpcProvider getServiceInstance(String serviceName);
 
 }

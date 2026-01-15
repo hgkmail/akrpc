@@ -13,8 +13,10 @@ akrpc:
     encode: json
     gzip: false
   discovery:
-    type: consul
-    address: localhost:8500
+    type: zookeeper
+    address: localhost:2181
+#    type: consul
+#    address: localhost:8500
 
 management:
   endpoints:

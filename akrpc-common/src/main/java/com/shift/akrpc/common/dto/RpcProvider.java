@@ -1,8 +1,6 @@
 package com.shift.akrpc.common.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +16,8 @@ import java.io.Serializable;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RpcProvider implements Serializable {
 
     @Serial

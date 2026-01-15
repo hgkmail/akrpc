@@ -192,13 +192,11 @@ public class RpcProxyFactory implements InvocationHandler {
             throw new RpcCallException("未配置服务名称或服务提供者 URL");
         }
 
-        var providers = serviceDiscovery.getService(this.providerName);
-        if (CollectionUtils.isEmpty(providers)) {
+        var provider = serviceDiscovery.getServiceInstance(this.providerName);
+        if (provider == null) {
             throw new RpcCallException("未找到服务提供者: " + this.providerName);
         }
 
-        // 简单起见，取第一个提供者 TODO: 负载均衡
-        var provider = providers.getFirst();
         return "http://%s:%d".formatted(provider.getAddress(), provider.getPort());
     }
 

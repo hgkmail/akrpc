@@ -1,11 +1,11 @@
 package com.shift.akrpc.common.core.discovery;
 
-import com.google.common.base.Splitter;
 import com.shift.akrpc.common.config.InetUtilsProperties;
 import com.shift.akrpc.common.config.RpcDiscoveryProperties;
 import com.shift.akrpc.common.constant.MagicValue;
+import com.shift.akrpc.common.dto.ServiceAddress;
+import com.shift.akrpc.common.utils.CommonUtils;
 import com.shift.akrpc.common.utils.InetUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,8 +13,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
-
-import java.util.List;
 
 /**
  * 服务发现配置类
@@ -42,18 +40,27 @@ public class DiscoveryConfig {
     @Bean(destroyMethod = "shutdown")
     public ServiceDiscovery consulServiceDiscovery() {
         // 解析地址
-        List<String> addressParts = Splitter.on(MagicValue.COLON).splitToList(rpcDiscoveryProperties.getAddress());
-        String host = StringUtils.isNotBlank(addressParts.getFirst()) ? addressParts.getFirst() : "localhost";
-        int port = addressParts.size() > 1 ? Integer.parseInt(addressParts.get(1)) : 8500;
+        ServiceAddress consulAddress = CommonUtils.parseServiceAddress(
+                rpcDiscoveryProperties.getAddress(),
+                MagicValue.LOCALHOST,
+                8500
+        );
 
         return new ConsulServiceDiscovery(
-                host,
-                port,
+                consulAddress.host(),
+                consulAddress.port(),
                 rpcDiscoveryProperties.getHealthCheckInterval(),
                 serverPort,
                 "/actuator/health",
                 "http"
         );
+    }
+
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    @ConditionalOnProperty(name = {"akrpc.discovery.type"}, havingValue = "zookeeper")
+    @Bean(destroyMethod = "shutdown")
+    public ServiceDiscovery zookeeperServiceDiscovery() {
+        return new ZookeeperServiceDiscovery(rpcDiscoveryProperties.getAddress());
     }
 
     @Bean

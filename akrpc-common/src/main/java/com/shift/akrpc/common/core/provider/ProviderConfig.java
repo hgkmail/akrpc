@@ -44,6 +44,7 @@ public class ProviderConfig implements InitializingBean, DisposableBean {
 
         long currentTime = System.currentTimeMillis() / 1000;
         RpcProvider rpcProvider = RpcProvider.builder().
+                name(applicationName).
                 address(ipAddress).port(serverPort).createTime(currentTime).updateTime(currentTime).
                 build();
         serviceDiscovery.register(applicationName, rpcProvider);

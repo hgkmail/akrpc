@@ -41,11 +41,14 @@
 		<lombok.version>1.18.40</lombok.version>
 		<apache.commons-lang3.version>3.18.0</apache.commons-lang3.version>
 		<apache.commons-collections4.version>4.5.0</apache.commons-collections4.version>
+		<apache.commons-pool2.version>2.12.1</apache.commons-pool2.version>
 		<guava.version>33.4.0-jre</guava.version>
 		<consul-api.version>1.4.5</consul-api.version>
 		<msgpack.version>0.9.10</msgpack.version>
 		<kryo.version>5.6.2</kryo.version>
 		<hessian.version>4.0.66</hessian.version>
+		<resilience4jVersion>2.3.0</resilience4jVersion>
+		<curator.version>5.9.0</curator.version>
 	</properties>
 
 	<modules>
@@ -100,6 +103,11 @@
 				<artifactId>commons-collections4</artifactId>
 				<version>${apache.commons-collections4.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>${apache.commons-pool2.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -136,6 +144,16 @@
 				<groupId>com.caucho</groupId>
 				<artifactId>hessian</artifactId>
 				<version>${hessian.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.resilience4j</groupId>
+				<artifactId>resilience4j-all</artifactId>
+				<version>${resilience4jVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.curator</groupId>
+				<artifactId>curator-x-discovery</artifactId>
+				<version>${curator.version}</version>
 			</dependency>
 
 		</dependencies>
