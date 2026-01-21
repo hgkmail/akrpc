@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.shift</groupId>
+	<groupId>io.github</groupId>
 	<artifactId>akrpc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>akrpc</name>
@@ -77,17 +77,17 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.shift</groupId>
+				<groupId>io.github</groupId>
 				<artifactId>akrpc-common</artifactId>
 				<version>${akrpc.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.shift</groupId>
+				<groupId>io.github</groupId>
 				<artifactId>akrpc-provider</artifactId>
 				<version>${akrpc.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.shift</groupId>
+				<groupId>io.github</groupId>
 				<artifactId>akrpc-consumer</artifactId>
 				<version>${akrpc.version}</version>
 			</dependency>

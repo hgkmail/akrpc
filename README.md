@@ -25,4 +25,4 @@ graph TD
 ```
 
 ## 4 快速开始
-先启动 provider app，再启动 consumer app。示例服务：`com.shift.akrpc.common.example.CalcService`。
+先启动 provider app，再启动 consumer app。示例服务：`io.github.akrpc.common.example.CalcService`。

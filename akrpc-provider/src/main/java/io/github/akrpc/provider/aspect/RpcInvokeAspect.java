@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RpcInvokeAspect {
 
-    @Pointcut("@within(com.shift.akrpc.common.annotation.RpcService)")
+    @Pointcut("@within(io.github.akrpc.common.annotation.RpcService)")
     public void rpcServiceMethods() {}
 
     @Around("rpcServiceMethods()")
