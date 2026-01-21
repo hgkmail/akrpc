@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AK-RPC Framework | 高性能分布式 RPC 框架</title>
+    <meta name="description" content="AK-RPC 是一个高性能、可扩展的远程过程调用（RPC）框架，旨在简化分布式系统中的服务间通信。">
+
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 配置 Tailwind 主题色 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6', // 蓝色
+                        secondary: '#8b5cf6', // 紫色
+                        dark: '#0f172a',    // 深蓝黑背景
+                        surface: '#1e293b', // 卡片背景
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 引入 Mermaid JS 用于渲染图表 -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose'
+        });
+    </script>
+
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-pattern {
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-dark text-slate-300 font-sans antialiased selection:bg-primary selection:text-white">
+
+<!-- 导航栏 -->
+<nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">AK</div>
+                <span class="font-bold text-xl text-white tracking-tight">AK-RPC</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <a href="#intro" class="hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">介绍</a>
+                    <a href="#features" class="hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">特性</a>
+                    <a href="#architecture" class="hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">架构</a>
+                    <a href="#quickstart" class="hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">快速开始</a>
+                    <a href="#" class="bg-white text-dark hover:bg-gray-200 px-4 py-2 rounded-full text-sm font-bold transition-transform hover:scale-105 active:scale-95">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero 区域 -->
+<section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute inset-0 hero-pattern opacity-20 pointer-events-none"></div>
+    <div class="absolute top-0 -left-4 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+    <div class="absolute top-0 -right-4 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-700 bg-slate-800/50 backdrop-blur-sm mb-8">
+            <span class="flex h-2 w-2 rounded-full bg-green-500"></span>
+            <span class="text-xs font-medium text-slate-300">v1.0.0 Stable Release</span>
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
+            构建下一代 <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">分布式微服务</span>
+        </h1>
+
+        <p class="mt-4 max-w-2xl text-xl text-slate-400 mb-10">
+            AK-RPC 是一个高性能、可扩展的远程过程调用框架。
+            <br class="hidden md:block">
+            专为简化分布式系统中的服务间通信而生。
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#quickstart" class="px-8 py-4 bg-primary hover:bg-blue-600 text-white rounded-lg font-bold text-lg transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2">
+                立即开始
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            <a href="#" class="px-8 py-4 bg-surface border border-slate-700 hover:border-slate-500 text-white rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                </svg>
+                查看源码
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 特性介绍 -->
+<section id="features" class="py-24 bg-surface/30 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-primary font-bold tracking-wide uppercase mb-2">Core Features</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">强大特性，尽在掌握</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="group p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">高性能</h4>
+                <p class="text-slate-400">采用高效的网络传输和自定义序列化机制，确保毫秒级低延迟和超高吞吐量。</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="group p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-secondary/50 transition-all hover:shadow-lg hover:shadow-secondary/10">
+                <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">可扩展性</h4>
+                <p class="text-slate-400">高度模块化设计，提供丰富的 SPI 扩展点，方便用户定制协议、序列化器等。</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="group p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-blue-400/50 transition-all hover:shadow-lg hover:shadow-blue-400/10">
+                <div class="w-12 h-12 bg-blue-400/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">服务发现</h4>
+                <p class="text-slate-400">内置智能服务注册与发现机制，默认支持 Zookeeper、Nacos 等多种注册中心。</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="group p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-teal-400/50 transition-all hover:shadow-lg hover:shadow-teal-400/10">
+                <div class="w-12 h-12 bg-teal-400/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">负载均衡</h4>
+                <p class="text-slate-400">支持轮询、随机、一致性 Hash 等多种负载均衡算法，提升系统的可靠性。</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="group p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-indigo-400/50 transition-all hover:shadow-lg hover:shadow-indigo-400/10 h-full lg:col-span-2">
+                <div class="w-12 h-12 bg-indigo-400/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3">易用性</h4>
+                <p class="text-slate-400">提供简洁的 API 和开箱即用的默认配置。完善的文档和示例代码，帮助开发者在几分钟内搭建起分布式应用，极大降低使用门槛。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 架构设计 -->
+<section id="architecture" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12">
+            <h2 class="text-primary font-bold tracking-wide uppercase mb-2">Architecture</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">架构概览</h3>
+            <p class="mt-4 text-slate-400 max-w-3xl">
+                AK-RPC 框架主要由三个核心组件组成：服务发现（Discovery）、服务器端（Provider）和客户端（Consumer）。
+                它们协同工作，共同完成高效的远程调用。
+            </p>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full z-0"></div>
+
+            <div class="grid lg:grid-cols-2 gap-10 items-center relative z-10">
+                <!-- 架构描述列表 -->
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-900 border border-blue-500 flex items-center justify-center text-blue-500 font-bold">1</div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold text-white">服务发现 (Discovery)</h4>
+                            <p class="text-slate-400 text-sm mt-1">负责应用注册与发现，维护应用实例的实时状态与地址信息。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full bg-purple-900 border border-purple-500 flex items-center justify-center text-purple-500 font-bold">2</div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold text-white">服务器端 (Provider)</h4>
+                            <p class="text-slate-400 text-sm mt-1">接收客户端请求，执行相应的业务逻辑，并将结果序列化返回。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-full bg-green-900 border border-green-500 flex items-center justify-center text-green-500 font-bold">3</div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold text-white">客户端 (Consumer)</h4>
+                            <p class="text-slate-400 text-sm mt-1">负责负载均衡、发起远程调用请求，并处理异步或同步的响应结果。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mermaid 图表 -->
+                <div class="bg-dark/50 p-6 rounded-xl border border-slate-600 flex justify-center items-center h-full">
+                    <div class="w-full">
+                            <pre class="mermaid">
+                            graph TD
+                                subgraph Core[AK-RPC 核心交互]
+                                    direction TB
+                                    C(Consumer<br>客户端) -->|RPC 调用| B(Provider<br>服务端)
+                                    B -->|注册 ip+port| A(Discovery<br>服务发现中心)
+                                    C -->|查找 ip+port| A
+                                end
+
+                                style A fill:#334155,stroke:#3b82f6,stroke-width:2px,color:#fff
+                                style B fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#fff
+                                style C fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+                                style Core fill:transparent,stroke:#475569,stroke-dasharray: 5 5,color:#cbd5e1
+                                linkStyle 0 stroke:#10b981,stroke-width:2px
+                                linkStyle 1 stroke:#8b5cf6,stroke-width:2px
+                                linkStyle 2 stroke:#3b82f6,stroke-width:2px
+                            </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 快速开始 -->
+<section id="quickstart" class="py-24 bg-surface/30 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12">
+            <h2 class="text-secondary font-bold tracking-wide uppercase mb-2">Ready to Code?</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white">快速上手</h3>
+            <p class="mt-4 text-slate-400">只需几行代码，启动您的第一个分布式服务。</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- 步骤 1 -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-white font-bold">1. 启动 Provider (服务端)</h4>
+                    <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">Java</span>
+                </div>
+                <div class="mockup-code bg-[#0d1117] text-slate-300 p-4 rounded-lg border border-slate-700 font-mono text-sm overflow-x-auto shadow-inner">
+                        <pre><code><span class="text-pink-400">public</span> <span class="text-pink-400">class</span> <span class="text-blue-300">ProviderApp</span> {
+    <span class="text-pink-400">public</span> <span class="text-pink-400">static</span> <span class="text-pink-400">void</span> <span class="text-yellow-300">main</span>(String[] args) {
+        <span class="text-slate-500">// 1. 创建服务配置</span>
+        ServiceConfig&lt;CalcService&gt; service = <span class="text-pink-400">new</span> ServiceConfig&lt;&gt;();
+        service.setInterface(CalcService.class);
+        service.setRef(<span class="text-pink-400">new</span> CalcServiceImpl());
+
+        <span class="text-slate-500">// 2. 导出服务</span>
+        AkRpcBootstrap.provider()
+            .registry(<span class="text-green-300">"zookeeper://127.0.0.1:2181"</span>)
+            .service(service)
+            .start();
+
+        System.out.println(<span class="text-green-300">"Provider started."</span>);
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- 步骤 2 -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-white font-bold">2. 启动 Consumer (客户端)</h4>
+                    <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">Java</span>
+                </div>
+                <div class="mockup-code bg-[#0d1117] text-slate-300 p-4 rounded-lg border border-slate-700 font-mono text-sm overflow-x-auto shadow-inner">
+                        <pre><code><span class="text-pink-400">public</span> <span class="text-pink-400">class</span> <span class="text-blue-300">ConsumerApp</span> {
+    <span class="text-pink-400">public</span> <span class="text-pink-400">static</span> <span class="text-pink-400">void</span> <span class="text-yellow-300">main</span>(String[] args) {
+        <span class="text-slate-500">// 1. 引用远程服务</span>
+        ReferenceConfig&lt;CalcService&gt; reference = <span class="text-pink-400">new</span> ReferenceConfig&lt;&gt;();
+        reference.setInterface(CalcService.class);
+
+        <span class="text-slate-500">// 2. 也是只需要一行代码启动</span>
+        AkRpcBootstrap.consumer()
+            .registry(<span class="text-green-300">"zookeeper://127.0.0.1:2181"</span>)
+            .reference(reference)
+            .start();
+
+        <span class="text-slate-500">// 3. 像调用本地方法一样调用远程服务</span>
+        CalcService service = reference.get();
+        <span class="text-pink-400">int</span> result = service.add(1, 2);
+        System.out.println(<span class="text-green-300">"Result: "</span> + result);
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-slate-500 text-sm">示例服务接口：<code class="bg-slate-800 px-1 py-0.5 rounded text-secondary">com.shift.akrpc.common.example.CalcService</code></p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark border-t border-slate-800 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-6 h-6 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-xs">AK</div>
+                    <span class="font-bold text-lg text-white">AK-RPC</span>
+                </div>
+                <p class="text-slate-500 text-sm">
+                    致力于打造最易用、最高效的 Java RPC 框架，助力企业级微服务架构落地。
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">文档</h4>
+                <ul class="space-y-2 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-primary transition-colors">快速入门</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">配置详解</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">API 参考</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">社区</h4>
+                <ul class="space-y-2 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-primary transition-colors">GitHub Issues</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">贡献指南</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Stack Overflow</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">更多</h4>
+                <ul class="space-y-2 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-primary transition-colors">博客</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">关于作者</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">许可证 (Apache 2.0)</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-slate-600 text-sm">© 2026 AK-RPC Framework. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="text-slate-500 hover:text-white transition-colors">
+                    <span class="sr-only">GitHub</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
