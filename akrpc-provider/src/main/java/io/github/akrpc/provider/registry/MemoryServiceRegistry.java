@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.registry;
+package io.github.akrpc.provider.registry;
 
 import io.github.akrpc.common.constant.MagicValue;
 import io.github.akrpc.common.core.provider.ServiceRegistry;

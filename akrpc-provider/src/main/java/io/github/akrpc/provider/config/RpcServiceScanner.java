@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.config;
+package io.github.akrpc.provider.config;
 
 import io.github.akrpc.common.annotation.RpcService;
 import io.github.akrpc.common.core.provider.ServiceRegistry;

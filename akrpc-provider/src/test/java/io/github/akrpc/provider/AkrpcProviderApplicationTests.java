@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider;
+package io.github.akrpc.provider;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

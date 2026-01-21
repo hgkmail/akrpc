@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.aspect;
+package io.github.akrpc.provider.aspect;
 
 /**
  * RPC服务调用切面，记录调用日志和耗时

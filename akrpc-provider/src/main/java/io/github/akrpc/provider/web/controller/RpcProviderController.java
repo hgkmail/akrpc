@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.web.controller;
+package io.github.akrpc.provider.web.controller;
 
 import io.github.akrpc.common.core.provider.interceptor.ProviderInterceptorChain;
 import io.github.akrpc.common.dto.RpcRequestPacket;

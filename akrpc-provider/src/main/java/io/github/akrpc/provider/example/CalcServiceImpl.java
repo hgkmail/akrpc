@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.example;
+package io.github.akrpc.provider.example;
 
 import io.github.akrpc.common.annotation.RpcService;
 import io.github.akrpc.common.example.CalcService;

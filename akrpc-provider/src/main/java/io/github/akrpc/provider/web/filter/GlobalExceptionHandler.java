@@ -1,4 +1,4 @@
-package com.shift.akrpc.provider.web.filter;
+package io.github.akrpc.provider.web.filter;
 
 import io.github.akrpc.common.exception.BaseExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
