@@ -1,7 +1,7 @@
-package com.shift.akrpc.consumer;
+package io.github.akrpc.consumer;
 
 import io.github.akrpc.common.example.CalcService;
-import com.shift.akrpc.consumer.web.controller.TestController;
+import io.github.akrpc.consumer.web.controller.TestController;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

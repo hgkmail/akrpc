@@ -1,4 +1,4 @@
-package com.shift.akrpc.consumer.web.filter;
+package io.github.akrpc.consumer.web.filter;
 
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;

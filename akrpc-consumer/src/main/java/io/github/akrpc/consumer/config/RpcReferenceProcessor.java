@@ -1,10 +1,10 @@
-package com.shift.akrpc.consumer.config;
+package io.github.akrpc.consumer.config;
 
 import io.github.akrpc.common.annotation.RpcReference;
 import io.github.akrpc.common.config.RpcConsumerProperties;
 import io.github.akrpc.common.core.discovery.ServiceDiscovery;
 import io.github.akrpc.common.exception.RpcProxyException;
-import com.shift.akrpc.consumer.proxy.RpcProxyFactory;
+import io.github.akrpc.consumer.proxy.RpcProxyFactory;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

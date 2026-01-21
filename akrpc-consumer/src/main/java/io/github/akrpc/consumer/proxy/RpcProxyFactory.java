@@ -1,4 +1,4 @@
-package com.shift.akrpc.consumer.proxy;
+package io.github.akrpc.consumer.proxy;
 
 import io.github.akrpc.common.annotation.RpcReference;
 import io.github.akrpc.common.config.RpcConsumerProperties;

@@ -1,4 +1,4 @@
-package com.shift.akrpc.consumer.config;
+package io.github.akrpc.consumer.config;
 
 import io.github.akrpc.common.config.RpcConsumerProperties;
 import org.springframework.beans.factory.config.BeanDefinition;

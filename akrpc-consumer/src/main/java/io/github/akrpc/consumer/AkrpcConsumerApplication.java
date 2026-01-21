@@ -1,4 +1,4 @@
-package com.shift.akrpc.consumer;
+package io.github.akrpc.consumer;
 
 import io.github.akrpc.common.annotation.EnableRpcProvider;
 import io.github.akrpc.common.config.RpcConsumerProperties;

@@ -1,4 +1,4 @@
-package com.shift.akrpc.consumer.web.controller;
+package io.github.akrpc.consumer.web.controller;
 
 import io.github.akrpc.common.annotation.RpcReference;
 import io.github.akrpc.common.dto.ApiResponse;
