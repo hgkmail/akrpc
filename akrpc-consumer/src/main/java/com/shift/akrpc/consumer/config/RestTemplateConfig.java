@@ -1,6 +1,6 @@
 package com.shift.akrpc.consumer.config;
 
-import com.shift.akrpc.common.config.RpcConsumerProperties;
+import io.github.akrpc.common.config.RpcConsumerProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

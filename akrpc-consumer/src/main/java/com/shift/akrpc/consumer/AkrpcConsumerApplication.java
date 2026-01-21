@@ -1,7 +1,7 @@
 package com.shift.akrpc.consumer;
 
-import com.shift.akrpc.common.annotation.EnableRpcProvider;
-import com.shift.akrpc.common.config.RpcConsumerProperties;
+import io.github.akrpc.common.annotation.EnableRpcProvider;
+import io.github.akrpc.common.config.RpcConsumerProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

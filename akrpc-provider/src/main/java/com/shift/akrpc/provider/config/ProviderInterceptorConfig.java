@@ -1,7 +1,7 @@
 package com.shift.akrpc.provider.config;
 
-import com.shift.akrpc.common.core.provider.*;
-import com.shift.akrpc.common.core.provider.interceptor.*;
+import io.github.akrpc.common.core.provider.ServiceRegistry;
+import io.github.akrpc.common.core.provider.interceptor.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

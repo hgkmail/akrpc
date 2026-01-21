@@ -1,9 +1,9 @@
 package com.shift.akrpc.consumer.config;
 
-import com.shift.akrpc.common.annotation.RpcReference;
-import com.shift.akrpc.common.config.RpcConsumerProperties;
-import com.shift.akrpc.common.core.discovery.ServiceDiscovery;
-import com.shift.akrpc.common.exception.RpcProxyException;
+import io.github.akrpc.common.annotation.RpcReference;
+import io.github.akrpc.common.config.RpcConsumerProperties;
+import io.github.akrpc.common.core.discovery.ServiceDiscovery;
+import io.github.akrpc.common.exception.RpcProxyException;
 import com.shift.akrpc.consumer.proxy.RpcProxyFactory;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;

@@ -1,11 +1,11 @@
 package com.shift.akrpc.consumer.web.controller;
 
-import com.shift.akrpc.common.annotation.RpcReference;
-import com.shift.akrpc.common.dto.ApiResponse;
-import com.shift.akrpc.common.example.CalcService;
-import com.shift.akrpc.common.example.ExampleReq;
-import com.shift.akrpc.common.example.ExampleResp;
-import com.shift.akrpc.common.example.ProductListReq;
+import io.github.akrpc.common.annotation.RpcReference;
+import io.github.akrpc.common.dto.ApiResponse;
+import io.github.akrpc.common.example.CalcService;
+import io.github.akrpc.common.example.ExampleReq;
+import io.github.akrpc.common.example.ExampleResp;
+import io.github.akrpc.common.example.ProductListReq;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;

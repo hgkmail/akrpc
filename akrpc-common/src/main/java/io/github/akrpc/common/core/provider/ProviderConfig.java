@@ -1,0 +1,61 @@
+package io.github.akrpc.common.core.provider;
+
+import io.github.akrpc.common.core.discovery.ServiceDiscovery;
+import io.github.akrpc.common.dto.RpcProvider;
+import io.github.akrpc.common.utils.InetUtils;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import io.github.akrpc.common.core.discovery.DiscoveryConfig;
+
+/**
+ * 服务提供者配置类
+ *
+ * @author Kim Huang
+ * @version 1.0
+ * @since 2026/1/9
+ */
+@Import(value = {DiscoveryConfig.class})
+@Configuration
+public class ProviderConfig implements InitializingBean, DisposableBean {
+
+    @Value("${server.port}")
+    private int serverPort;
+
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private final InetUtils inetUtils;
+
+    private final ServiceDiscovery serviceDiscovery;
+
+    private RpcProvider registeredProvider;
+
+    public ProviderConfig(InetUtils inetUtils, ServiceDiscovery serviceDiscovery) {
+        this.inetUtils = inetUtils;
+        this.serviceDiscovery = serviceDiscovery;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String ipAddress = inetUtils.findFirstNonLoopbackHostInfo().getIpAddress();
+
+        long currentTime = System.currentTimeMillis() / 1000;
+        RpcProvider rpcProvider = RpcProvider.builder().
+                name(applicationName).
+                address(ipAddress).port(serverPort).createTime(currentTime).updateTime(currentTime).
+                build();
+        serviceDiscovery.register(applicationName, rpcProvider);
+
+        registeredProvider = rpcProvider;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        if (registeredProvider != null) {
+            serviceDiscovery.deregister(applicationName, registeredProvider);
+        }
+    }
+}

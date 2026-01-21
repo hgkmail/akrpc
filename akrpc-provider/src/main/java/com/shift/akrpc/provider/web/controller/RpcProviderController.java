@@ -1,8 +1,8 @@
 package com.shift.akrpc.provider.web.controller;
 
-import com.shift.akrpc.common.core.provider.interceptor.ProviderInterceptorChain;
-import com.shift.akrpc.common.dto.RpcRequestPacket;
-import com.shift.akrpc.common.dto.RpcResponse;
+import io.github.akrpc.common.core.provider.interceptor.ProviderInterceptorChain;
+import io.github.akrpc.common.dto.RpcRequestPacket;
+import io.github.akrpc.common.dto.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

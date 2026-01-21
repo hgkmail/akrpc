@@ -1,0 +1,56 @@
+package io.github.akrpc.common.core.provider.interceptor;
+
+import io.github.akrpc.common.constant.MagicValue;
+import io.github.akrpc.common.core.transport.RpcCodec;
+import io.github.akrpc.common.core.transport.RpcCodecFactory;
+import io.github.akrpc.common.dto.RpcRequestBody;
+import io.github.akrpc.common.dto.RpcRequestPacket;
+import io.github.akrpc.common.dto.RpcResponse;
+import io.github.akrpc.common.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
+
+/**
+ * 请求体处理拦截器
+ *
+ * @author Kim Huang
+ * @version 1.0
+ * @since 2026/1/13
+ */
+@Slf4j
+public class BodyProviderInterceptor implements ProviderInterceptor {
+
+    @Override
+    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
+        // 获取编码器
+        byte encodeType = reqPacket.getHeader().getEncode();
+        RpcCodec rpcCodec = RpcCodecFactory.getCodec(encodeType);
+        if (rpcCodec == null) {
+            log.warn("不支持的RPC编码类型: {}", encodeType);
+            rpcRes.error("不支持的RPC编码类型: " + encodeType);
+            return false;
+        }
+
+        // 解析请求体
+        RpcRequestBody requestBody = rpcCodec.decode(reqPacket.getBody());
+
+        // 校验请求参数
+        if (requestBody == null ||
+            StringUtils.isEmpty(requestBody.getClassName()) ||
+            StringUtils.isEmpty(requestBody.getMethodName())
+        ) {
+            log.warn("收到无效的RPC请求: {}", JsonUtils.toJson(requestBody));
+
+            rpcRes.error("无效的请求参数");
+            return false;
+        }
+
+        // 将请求体存入上下文
+        context.put(MagicValue.BODY, requestBody);
+
+        return true;
+    }
+
+}

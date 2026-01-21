@@ -1,11 +1,11 @@
 package com.shift.akrpc.provider.example;
 
-import com.shift.akrpc.common.annotation.RpcService;
-import com.shift.akrpc.common.example.CalcService;
-import com.shift.akrpc.common.example.ExampleReq;
-import com.shift.akrpc.common.example.ExampleReq.ReqItem;
-import com.shift.akrpc.common.example.ExampleResp;
-import com.shift.akrpc.common.example.ProductListReq;
+import io.github.akrpc.common.annotation.RpcService;
+import io.github.akrpc.common.example.CalcService;
+import io.github.akrpc.common.example.ExampleReq;
+import io.github.akrpc.common.example.ExampleReq.ReqItem;
+import io.github.akrpc.common.example.ExampleResp;
+import io.github.akrpc.common.example.ProductListReq;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

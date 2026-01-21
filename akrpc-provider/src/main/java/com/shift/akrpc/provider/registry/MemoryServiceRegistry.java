@@ -1,7 +1,7 @@
 package com.shift.akrpc.provider.registry;
 
-import com.shift.akrpc.common.constant.MagicValue;
-import com.shift.akrpc.common.core.provider.ServiceRegistry;
+import io.github.akrpc.common.constant.MagicValue;
+import io.github.akrpc.common.core.provider.ServiceRegistry;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;

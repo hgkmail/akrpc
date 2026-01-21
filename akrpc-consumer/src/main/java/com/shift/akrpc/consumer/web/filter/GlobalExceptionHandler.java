@@ -1,6 +1,6 @@
 package com.shift.akrpc.consumer.web.filter;
 
-import com.shift.akrpc.common.exception.BaseExceptionHandler;
+import io.github.akrpc.common.exception.BaseExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

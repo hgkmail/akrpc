@@ -1,6 +1,6 @@
 package com.shift.akrpc.provider;
 
-import com.shift.akrpc.common.annotation.EnableRpcProvider;
+import io.github.akrpc.common.annotation.EnableRpcProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
