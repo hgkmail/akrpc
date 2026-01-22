@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableRpcProvider
 @SpringBootApplication
-@EnableConfigurationProperties(value = {RpcConsumerProperties.class})
+@EnableConfigurationProperties(RpcConsumerProperties.class)
 public class AkrpcConsumerApplication {
 
     public static void main(String[] args) {
