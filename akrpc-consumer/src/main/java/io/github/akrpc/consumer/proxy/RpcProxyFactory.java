@@ -17,9 +17,12 @@ import io.github.akrpc.common.utils.GZIPUtils;
 import io.github.akrpc.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -75,9 +78,9 @@ public class RpcProxyFactory implements InvocationHandler {
         String rpcUrl = this.buildUrl();
         RpcRequestHeader reqHeader = this.buildHeader(encodeType);
         RpcRequestBody reqBody = this.buildBody(method, args);
-        RpcRequestPacket packet = this.buildPacket(reqHeader, reqBody, rpcCodec);
+        RpcRequestPacket packet = this.buildPacket(reqBody, rpcCodec);
 
-        RpcResponse response = this.makeRemoteCall(rpcUrl, packet, reqBody);
+        RpcResponse response = this.makeRemoteCall(rpcUrl, new HttpEntity<>(packet, reqHeader.toHttpHeaders()), reqBody);
 
         if (response == null) {
             throw new RpcCallException("响应为空");
@@ -108,41 +111,46 @@ public class RpcProxyFactory implements InvocationHandler {
     /**
      * 执行远程调用
      */
-    private @Nullable RpcResponse makeRemoteCall(String rpcUrl, RpcRequestPacket packet, RpcRequestBody reqBody) {
+    private RpcResponse makeRemoteCall(String rpcUrl, HttpEntity<RpcRequestPacket> httpEntity, RpcRequestBody reqBody) {
         log.info("调用服务: {}.{}, version: {}, url: {}, reqBody: {}",
                 reqBody.getClassName(), reqBody.getMethodName(), reqBody.getVersion(), rpcUrl, JsonUtils.toJson(reqBody));
         long beginTime = System.currentTimeMillis();
 
         // 发送 HTTP 请求
-        RpcResponse response = restTemplate.postForObject(rpcUrl, packet, RpcResponse.class);
+        ResponseEntity<RpcResponse> responseEntity = restTemplate.exchange(rpcUrl, HttpMethod.POST, httpEntity, RpcResponse.class);
 
-        log.info("服务调用完成: {}.{}, version: {}, response: {}, 耗时: {} ms",
-                reqBody.getClassName(), reqBody.getMethodName(), reqBody.getVersion(),
-                JsonUtils.toJson(response), System.currentTimeMillis() - beginTime);
-        return response;
+        HttpStatusCode statusCode = responseEntity.getStatusCode();
+        RpcResponse rpcResponse = responseEntity.getBody();
+        log.info("服务调用结束: {}.{}, status:{}, version: {}, response: {}, 耗时: {} ms",
+                statusCode, reqBody.getClassName(), reqBody.getMethodName(), reqBody.getVersion(),
+                JsonUtils.toJson(rpcResponse), System.currentTimeMillis() - beginTime);
+
+        // 检查响应状态码
+        if (!statusCode.is2xxSuccessful()) {
+            throw new RpcCallException("服务调用异常，HTTP 状态码: " + statusCode);
+        }
+
+        return rpcResponse;
     }
 
     /**
      * 构建 RPC 调用 URL
      */
-    private @NonNull String buildUrl() {
+    private String buildUrl() {
         return this.getRealAddress() + "/rpc/invoke";
     }
 
     /**
      * 构建 RPC 请求包
      */
-    private @NonNull RpcRequestPacket buildPacket(
-            RpcRequestHeader reqHeader,
+    private RpcRequestPacket buildPacket(
             RpcRequestBody reqBody,
             RpcCodec rpcCodec
     ) {
         RpcRequestPacket packet = new RpcRequestPacket();
-        packet.setHeader(reqHeader);
         packet.setBody(rpcCodec.encode(reqBody));
 
         // 判断是否启用 GZIP 压缩
-        packet.getHeader().setGzip(ConvertUtils.bool2Byte(rpcConsumerProperties.isGzip()));
         if (rpcConsumerProperties.isGzip()) {
             packet.setBody(GZIPUtils.compress(packet.getBody()));
         }
@@ -174,6 +182,8 @@ public class RpcProxyFactory implements InvocationHandler {
         RpcRequestHeader header = new RpcRequestHeader();
         header.setRequestId(UUID.randomUUID().toString());
         header.setEncode(encodeType.getCode());
+        header.setGzip(ConvertUtils.bool2Byte(rpcConsumerProperties.isGzip()));
+
         return header;
     }
 

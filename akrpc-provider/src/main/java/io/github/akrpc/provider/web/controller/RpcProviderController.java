@@ -1,9 +1,11 @@
 package io.github.akrpc.provider.web.controller;
 
 import io.github.akrpc.common.core.provider.interceptor.ProviderInterceptorChain;
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +27,7 @@ public class RpcProviderController {
     }
 
     @PostMapping("/invoke")
-    public RpcResponse invoke(@RequestBody RpcRequestPacket packet) {
-        return chain.process(packet);
+    public RpcResponse invoke(@RequestBody RpcRequestPacket packet, @RequestHeader HttpHeaders headers) {
+        return chain.process(packet, RpcRequestHeader.fromHttpHeaders(headers));
     }
 }

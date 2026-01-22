@@ -4,6 +4,7 @@ import io.github.akrpc.common.constant.MagicValue;
 import io.github.akrpc.common.core.transport.RpcCodec;
 import io.github.akrpc.common.core.transport.RpcCodecFactory;
 import io.github.akrpc.common.dto.RpcRequestBody;
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import io.github.akrpc.common.utils.JsonUtils;
@@ -23,9 +24,10 @@ import java.util.Map;
 public class BodyProviderInterceptor implements ProviderInterceptor {
 
     @Override
-    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
+    public boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes,
+                           Map<String, Object> context) {
         // 获取编码器
-        byte encodeType = reqPacket.getHeader().getEncode();
+        byte encodeType = header.getEncode();
         RpcCodec rpcCodec = RpcCodecFactory.getCodec(encodeType);
         if (rpcCodec == null) {
             log.warn("不支持的RPC编码类型: {}", encodeType);

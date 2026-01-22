@@ -1,5 +1,6 @@
 package io.github.akrpc.common.core.provider.interceptor;
 
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 
@@ -20,6 +21,7 @@ public interface ProviderInterceptor {
      * @param rpcRes RPC 响应对象
      * @return 如果返回 true 则继续执行后续拦截器或处理逻辑，返回 false 则终止处理
      */
-    boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context);
+    boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes,
+                    Map<String, Object> context);
 
 }

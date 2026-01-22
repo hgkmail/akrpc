@@ -1,6 +1,7 @@
 package io.github.akrpc.common.core.provider.interceptor;
 
 import io.github.akrpc.common.constant.MagicValue;
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,8 +34,8 @@ public class ProviderInterceptorChain {
     /**
      * 执行过滤器链
      */
-    public RpcResponse process(RpcRequestPacket packet) {
-        RpcResponse response = new RpcResponse(packet.getHeader().getRequestId());
+    public RpcResponse process(RpcRequestPacket packet, RpcRequestHeader header) {
+        RpcResponse response = new RpcResponse(header.getRequestId());
         if (CollectionUtils.isEmpty(interceptors)) {
             return response;
         }
@@ -42,7 +43,7 @@ public class ProviderInterceptorChain {
         // 依次执行过滤器
         Map<String, Object> context = new HashMap<>();
         for (ProviderInterceptor interceptor : interceptors) {
-            boolean shouldContinue = interceptor.process(packet, response, context);
+            boolean shouldContinue = interceptor.process(packet, header, response, context);
             if (!shouldContinue) {
                 break;
             }

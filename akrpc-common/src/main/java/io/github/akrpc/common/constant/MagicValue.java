@@ -27,7 +27,7 @@ public class MagicValue {
     /**
      * RPC 魔法字
      */
-    public static final char[] MAGIC_WORD = {'A', 'K', 'R', 'P', 'C'};
+    public static final String MAGIC_WORD = "AKRPC";
 
     public static final String BODY = "body";
 

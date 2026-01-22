@@ -1,5 +1,6 @@
 package io.github.akrpc.common.core.provider.interceptor;
 
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import io.github.akrpc.common.utils.JsonUtils;
@@ -18,9 +19,10 @@ import java.util.Map;
 public class PacketProviderInterceptor implements ProviderInterceptor {
 
     @Override
-    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
+    public boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes,
+                           Map<String, Object> context) {
         if (reqPacket == null ||
-            reqPacket.getHeader() == null ||
+            header == null ||
             reqPacket.getBody() == null ||
             reqPacket.getChecksum() == 0
         ) {

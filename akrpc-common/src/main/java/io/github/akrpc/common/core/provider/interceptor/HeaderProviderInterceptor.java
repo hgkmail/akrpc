@@ -5,6 +5,7 @@ import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.Map;
 
@@ -18,18 +19,10 @@ import java.util.Map;
 public class HeaderProviderInterceptor implements ProviderInterceptor {
 
     @Override
-    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
-        RpcRequestHeader header = reqPacket.getHeader();
-
-        if (header.getMagic().length != MagicValue.MAGIC_WORD.length) {
-            rpcRes.error("无效的请求头: 魔法字长度错误");
+    public boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes, Map<String, Object> context) {
+        if (!Strings.CI.equals(header.getMagic(), MagicValue.MAGIC_WORD)) {
+            rpcRes.error("无效的请求头: 魔法字错误");
             return false;
-        }
-        for (int i = 0; i < MagicValue.MAGIC_WORD.length; i++) {
-            if (header.getMagic()[i] != MagicValue.MAGIC_WORD[i]) {
-                rpcRes.error("无效的请求头: 魔法字错误");
-                return false;
-            }
         }
 
         if (StringUtils.isEmpty(header.getRequestId())) {

@@ -1,5 +1,6 @@
 package io.github.akrpc.common.core.provider.interceptor;
 
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import io.github.akrpc.common.utils.CRC32Utils;
@@ -19,7 +20,8 @@ import java.util.Map;
 public class ChecksumProviderInterceptor implements ProviderInterceptor {
 
     @Override
-    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
+    public boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes,
+                           Map<String, Object> context) {
         // 校验 checksum
         long checksum = CRC32Utils.getValue(reqPacket.getBody());
         if (checksum != reqPacket.getChecksum()) {

@@ -21,11 +21,6 @@ public class RpcRequestPacket implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 请求头
-     */
-    private RpcRequestHeader header;
-
-    /**
      * 请求体
      * @see RpcRequestBody
      */

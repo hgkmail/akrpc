@@ -2,6 +2,7 @@ package io.github.akrpc.common.core.provider.interceptor;
 
 import io.github.akrpc.common.core.provider.ServiceRegistry;
 import io.github.akrpc.common.dto.RpcRequestBody;
+import io.github.akrpc.common.dto.RpcRequestHeader;
 import io.github.akrpc.common.dto.RpcRequestPacket;
 import io.github.akrpc.common.dto.RpcResponse;
 import io.github.akrpc.common.utils.ConvertUtils;
@@ -27,7 +28,8 @@ public class InvokeProviderInterceptor implements ProviderInterceptor {
     }
 
     @Override
-    public boolean process(RpcRequestPacket reqPacket, RpcResponse rpcRes, Map<String, Object> context) {
+    public boolean process(RpcRequestPacket reqPacket, RpcRequestHeader header, RpcResponse rpcRes,
+                           Map<String, Object> context) {
         try {
             RpcRequestBody requestBody = (RpcRequestBody) context.get("body");
 
